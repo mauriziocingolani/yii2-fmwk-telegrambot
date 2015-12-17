@@ -15,7 +15,9 @@ use yii\base\InvalidConfigException;
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @version 1.0
  */
-class Twitter extends \yii\base\Component {
+class TelegramBot extends \yii\base\Component {
+
+    const URL = 'https://api.telegram.org/bot';
 
     public $token;
 
@@ -27,6 +29,10 @@ class Twitter extends \yii\base\Component {
         parent::init();
         if (!$this->token)
             throw new InvalidConfigException('Componente Telegram Bot: parametri di configurazione mancanti.');
+    }
+
+    public function getMe() {
+        return file_get_contents(self::URL . $this->token . '/getMe');
     }
 
 }
