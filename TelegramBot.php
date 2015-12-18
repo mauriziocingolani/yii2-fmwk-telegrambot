@@ -5,15 +5,14 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
 use yii\base\InvalidConfigException;
 
 /**
- * Componente per l'interazione con il Telegram Bot relativo all'applicazione.
- * Richiede l'inizializzazione in fase di configurazione dei seguenti parametri:
+ * This component handles the communication with the Telegram Bot associated
+ * with an application.
  * <ul>
  * <li>$token: Token del Bot</li>
  * </ul>
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
- * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.0.1
  */
 class TelegramBot extends \yii\base\Component {
 
@@ -22,17 +21,55 @@ class TelegramBot extends \yii\base\Component {
     public $token;
 
     /**
-     * Inizializza il componente e verifica che i parametri siano stati impostati.
-     * @throws InvalidConfigException
+     * Initialize the component, checking whether the $token property has been set.
+     * @throws InvalidConfigException If the $token property hasn't been set
      */
     public function init() {
         parent::init();
         if (!$this->token)
-            throw new InvalidConfigException('Componente Telegram Bot: parametri di configurazione mancanti.');
+            throw new InvalidConfigException('Telegram Bot component: configuration parameter $token missing.');
     }
 
+    /**
+     * A simple method for testing your bot's auth token. Requires no parameters.
+     * Returns basic information about the bot in form of a <code>User</code> object.
+     * @return \mauriziocingolani\yii2fmwktelegrambot\User <code>User</code> object with basic Bot informations
+     */
     public function getMe() {
-        return file_get_contents(self::URL . $this->token . '/getMe');
+        $response = json_decode(file_get_contents(self::URL . $this->token . '/getMe'));
+        if ($response->ok === true)
+            return new User($response->result);
+        throw new \yii\web\HttpException(400, __METHOD__ . ': something went wrong with the Telegram Bot.');
+    }
+
+    /**
+     * Use this method to receive incoming updates using long polling (wiki).
+     * If set, <code>offset</code> be greater by one than the highest among the identifiers of previously 
+     * received updates. By default, updates starting with the earliest unconfirmed update are returned. 
+     * An update is considered confirmed as soon as <code>getUpdates</code> is called with an <code>offset</code>
+     * higher than its <code>update_id</code>.
+     * An array of <code>Update</code> objects is returned.
+     * @param integer $offset Identifier of the first update to be returned
+     * @param integer $limit Limits the number of updates to be retrieved (1 to 100, default 100)
+     * @param type $timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling
+     * @return \mauriziocingolani\yii2fmwktelegrambot\Update
+     * @throws \yii\web\HttpException
+     */
+    public function getUpdates($offset = null, $limit = 100, $timeout = 0) {
+        $url = self::URL . $this->token . '/getUpdates?limit=' . (int) $limit;
+        if ($offset)
+            $url.='&offset=' . (int) $offset;
+        if ($timeout > 0)
+            $url.='&timeout=' . (int) $timeout;
+        $response = json_decode(file_get_contents($url));
+        if ($response->ok === true) :
+            $data = [];
+            foreach ($response->result as $update) :
+                $data[] = new Update($update);
+            endforeach;
+            return $data;
+        endif;
+        throw new \yii\web\HttpException(400, __METHOD__ . ': something went wrong with the Telegram Bot.');
     }
 
 }
