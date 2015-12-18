@@ -12,7 +12,7 @@ use yii\base\InvalidConfigException;
  * </ul>
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  */
 class TelegramBot extends \yii\base\Component {
 
@@ -34,6 +34,7 @@ class TelegramBot extends \yii\base\Component {
      * A simple method for testing your bot's auth token. Requires no parameters.
      * Returns basic information about the bot in form of a <code>User</code> object.
      * @return \mauriziocingolani\yii2fmwktelegrambot\User <code>User</code> object with basic Bot informations
+     * @throws \yii\web\HttpException If something went wrong
      */
     public function getMe() {
         $response = json_decode(file_get_contents(self::URL . $this->token . '/getMe'));
@@ -53,7 +54,7 @@ class TelegramBot extends \yii\base\Component {
      * @param integer $limit Limits the number of updates to be retrieved (1 to 100, default 100)
      * @param type $timeout Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling
      * @return \mauriziocingolani\yii2fmwktelegrambot\Update
-     * @throws \yii\web\HttpException
+     * @throws \yii\web\HttpException If something went wrong
      */
     public function getUpdates($offset = null, $limit = 100, $timeout = 0) {
         $url = self::URL . $this->token . '/getUpdates?limit=' . (int) $limit;
@@ -69,6 +70,20 @@ class TelegramBot extends \yii\base\Component {
             endforeach;
             return $data;
         endif;
+        throw new \yii\web\HttpException(400, __METHOD__ . ': something went wrong with the Telegram Bot.');
+    }
+
+    /**
+     * Use this method to send text messages. On success, the sent <code>Message</code> is returned.
+     * @param type $chat_id Unique identifier for the target chat or username of the target channel
+     * @param type $text Text of the message to be sent
+     * @return \mauriziocingolani\yii2fmwktelegrambot\Message Sent message
+     * @throws \yii\web\HttpException If something went wrong
+     */
+    public function sendMessage($chat_id, $text) {
+        $response = json_decode(file_get_contents(self::URL . $this->token . '/sendMessage?chat_id=' . (int) $chat_id . '&text=' . $text));
+        if ($response->ok == true)
+            return new Message($response->result);
         throw new \yii\web\HttpException(400, __METHOD__ . ': something went wrong with the Telegram Bot.');
     }
 
