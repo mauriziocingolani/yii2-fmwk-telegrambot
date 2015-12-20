@@ -10,6 +10,7 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * @property integer $date Date the message was sent in Unix time
  * @property Chat $chat Conversation the message belongs to
  * @property string $text For text messages, the actual UTF-8 text of the message (optional)
+ * @property Document $document Message is a general file, information about the file (optional)
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
@@ -24,6 +25,7 @@ class Message extends \yii\base\Object {
     private $_date;
     private $_chat;
     private $_text;
+    private $_document;
 
     /**
      * Builds a new instance of this class, and populates the instance properties with the object
@@ -34,6 +36,7 @@ class Message extends \yii\base\Object {
      * <li>date</li>
      * <li>chat</li>
      * <li>text (optional)</li>
+     * <li>document (optional)</li>
      * </ul>
      * @param mixed $object Object with message data
      */
@@ -43,8 +46,8 @@ class Message extends \yii\base\Object {
             $this->_from = new User($object->from);
         $this->_date = (int) $object->date;
         $this->_chat = new Chat($object->chat);
-        if (isset($object->text))
-            $this->_text = $object->text;
+        if (isset($object->document))
+            $this->_document = new Document($object->document);
     }
 
     /**
