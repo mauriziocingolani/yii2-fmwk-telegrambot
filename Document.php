@@ -5,11 +5,11 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
 /**
  * This object represents a general file (as opposed to photos, voice messages and audio files).
  * 
- * @property string file_id Unique file identifier
- * @property PhotoSize thumb Document thumbnail as defined by sender (optional)
- * @property file_name	string Original filename as defined by sender (optional)
- * @property mime_type string MIME type of the file as defined by sender (optional)
- * @property file_size integer File size (optional)
+ * @property string $file_id Unique file identifier
+ * @property PhotoSize $thumb Document thumbnail as defined by sender (optional)
+ * @property string $file_name Original filename as defined by sender (optional)
+ * @property string mime_type MIME type of the file as defined by sender (optional)
+ * @property integer file_size File size (optional)
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
@@ -17,7 +17,7 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * 
  * @see https://core.telegram.org/bots/api#photosize
  */
-class Document {
+class Document extends \yii\base\Object {
 
     private $_file_id;
     private $_thumb;

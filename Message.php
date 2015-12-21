@@ -15,7 +15,7 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.1
+ * @version 1.0.2
  * 
  * @see https://core.telegram.org/bots/api#message
  */
@@ -49,6 +49,8 @@ class Message extends \yii\base\Object {
             $this->_from = new User($object->from);
         $this->_date = (int) $object->date;
         $this->_chat = new Chat($object->chat);
+        if (isset($object->text))
+            $this->_text = $object->text;
         if (isset($object->document))
             $this->_document = new Document($object->document);
         if (isset($object->photo)) :
@@ -100,6 +102,14 @@ class Message extends \yii\base\Object {
      */
     public function getText() {
         return $this->_text;
+    }
+
+    /**
+     * If the message is a general file, returns the information about the file.
+     * @return Document Message is a general file, information about the file
+     */
+    public function getDocument() {
+        return $this->_document;
     }
 
     /**
