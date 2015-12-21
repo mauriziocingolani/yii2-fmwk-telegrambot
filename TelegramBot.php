@@ -12,11 +12,12 @@ use yii\base\InvalidConfigException;
  * </ul>
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.0.3
  */
 class TelegramBot extends \yii\base\Component {
 
     const URL = 'https://api.telegram.org/bot';
+    const FILE_URL = 'https://api.telegram.org/file/bot';
 
     public $token;
 
@@ -84,6 +85,25 @@ class TelegramBot extends \yii\base\Component {
         $response = json_decode(file_get_contents(self::URL . $this->token . '/sendMessage?chat_id=' . (int) $chat_id . '&text=' . $text));
         if ($response->ok == true)
             return new Message($response->result);
+        throw new \yii\web\HttpException(400, __METHOD__ . ': something went wrong with the Telegram Bot.');
+    }
+
+    /**
+     * Use this method to get basic info about a file and prepare it for downloading. 
+     * For the moment, bots can download files of up to 20MB in size. On success, 
+     * a <code>File</code> object is returned. The file can then be downloaded via the
+     * link <code>https://api.telegram.org/file/bot&lt;token&gt;/&lt;file_path&gt;</code>, 
+     * where <code>&lt;file_path&gt;</code> is taken from the response. It is guaranteed
+     *  that the link will be valid for at least 1 hour. When the link expires, a new one can be 
+     * requested by calling <code>getFile</code> again.
+     * @param string $file_id File identifier to get info about
+     * @return \mauriziocingolani\yii2fmwktelegrambot\File <code>File</code> object with info
+     * @throws \yii\web\HttpException If something went wrong
+     */
+    public function getFile($file_id) {
+        $response = json_decode(file_get_contents(self::URL . $this->token . '/getFile?file_id=' . $file_id));
+        if ($response->ok == true)
+            return new File($response->result);
         throw new \yii\web\HttpException(400, __METHOD__ . ': something went wrong with the Telegram Bot.');
     }
 

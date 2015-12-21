@@ -11,10 +11,11 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * @property Chat $chat Conversation the message belongs to
  * @property string $text For text messages, the actual UTF-8 text of the message (optional)
  * @property Document $document Message is a general file, information about the file (optional)
+ * @property PhotoSize[] $photo Message is a photo, available sizes of the photo (optional)
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.0.1
  * 
  * @see https://core.telegram.org/bots/api#message
  */
@@ -26,6 +27,7 @@ class Message extends \yii\base\Object {
     private $_chat;
     private $_text;
     private $_document;
+    private $_photo;
 
     /**
      * Builds a new instance of this class, and populates the instance properties with the object
@@ -37,6 +39,7 @@ class Message extends \yii\base\Object {
      * <li>chat</li>
      * <li>text (optional)</li>
      * <li>document (optional)</li>
+     * <li>photo (optional)</li>
      * </ul>
      * @param mixed $object Object with message data
      */
@@ -48,6 +51,12 @@ class Message extends \yii\base\Object {
         $this->_chat = new Chat($object->chat);
         if (isset($object->document))
             $this->_document = new Document($object->document);
+        if (isset($object->photo)) :
+            $this->_photo = [];
+            foreach ($object->photo as $photo) :
+                $this->_photo[] = new PhotoSize($photo);
+            endforeach;
+        endif;
     }
 
     /**
@@ -91,6 +100,14 @@ class Message extends \yii\base\Object {
      */
     public function getText() {
         return $this->_text;
+    }
+
+    /**
+     * If the message is a photo, returns the available sizes of the photo.
+     * @return PhotoSize[] Message is a photo, available sizes of the photo
+     */
+    public function getPhoto() {
+        return $this->_photo;
     }
 
 }

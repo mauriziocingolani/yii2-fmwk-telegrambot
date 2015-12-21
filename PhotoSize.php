@@ -44,7 +44,7 @@ class PhotoSize extends \yii\base\Object {
     }
 
     /**
-     * Returns the unique identifier for this file
+     * Returns the unique identifier for this file.
      * @return integer Unique identifier for this file
      */
     public function getFile_id() {
