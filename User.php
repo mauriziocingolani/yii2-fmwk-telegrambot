@@ -12,7 +12,7 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.0.1
  * 
  * @see https://core.telegram.org/bots/api#user
  */
@@ -22,6 +22,7 @@ class User extends \yii\base\Object {
     private $_first_name;
     private $_last_name;
     private $_username;
+    private $_language_code;
 
     /**
      * Builds a new instance of this class, and populates the instance properties with the object
@@ -31,6 +32,7 @@ class User extends \yii\base\Object {
      * <li>first_name</li>
      * <li>last_name (optional)</li>
      * <li>username (optional)</li>
+     * <li>language_code (optional)</li>
      * </ul>
      * These names reflect the names of the private properties of this class, and their value will be assigned
      * to the corrisponding class property.
