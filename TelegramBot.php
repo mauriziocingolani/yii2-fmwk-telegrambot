@@ -12,7 +12,7 @@ use yii\base\InvalidConfigException;
  * </ul>
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.3
+ * @version 1.0.4
  */
 class TelegramBot extends \yii\base\Component {
 
@@ -20,6 +20,7 @@ class TelegramBot extends \yii\base\Component {
     const FILE_URL = 'https://api.telegram.org/file/bot';
 
     public $token;
+    public $id;
 
     /**
      * Initialize the component, checking whether the $token property has been set.
@@ -60,9 +61,9 @@ class TelegramBot extends \yii\base\Component {
     public function getUpdates($offset = null, $limit = 100, $timeout = 0) {
         $url = self::URL . $this->token . '/getUpdates?limit=' . (int) $limit;
         if ($offset)
-            $url.='&offset=' . (int) $offset;
+            $url .= '&offset=' . (int) $offset;
         if ($timeout > 0)
-            $url.='&timeout=' . (int) $timeout;
+            $url .= '&timeout=' . (int) $timeout;
         $response = json_decode(file_get_contents($url));
         if ($response->ok === true) :
             $data = [];
