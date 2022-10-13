@@ -13,11 +13,11 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.1
  * 
  * @see https://core.telegram.org/bots/api#photosize
  */
-class Document extends \yii\base\Object {
+class Document extends \yii\base\BaseObject {
 
     private $_file_id;
     private $_thumb;

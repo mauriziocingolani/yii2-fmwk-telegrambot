@@ -14,11 +14,11 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0
+ * @version 1.1
  * 
  * @see https://core.telegram.org/bots/api#chat
  */
-class Chat extends \yii\base\Object {
+class Chat extends \yii\base\BaseObject {
 
     private $_id;
     private $_type;

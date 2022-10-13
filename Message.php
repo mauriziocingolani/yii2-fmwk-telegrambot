@@ -15,11 +15,11 @@ namespace mauriziocingolani\yii2fmwktelegrambot;
  * 
  * @author Maurizio Cingolani <mauriziocingolani74@gmail.com>
  * @license http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @version 1.0.2
+ * @version 1.1
  * 
  * @see https://core.telegram.org/bots/api#message
  */
-class Message extends \yii\base\Object {
+class Message extends \yii\base\BaseObject {
 
     private $_message_id;
     private $_from;
